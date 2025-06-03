@@ -1,102 +1,93 @@
-body {
-  background: linear-gradient(to bottom, #1e1e2f, #000);
-  color: #fff;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
+document.addEventListener("DOMContentLoaded", function() {
 
-.machine-container {
-  text-align: center;
-  background-color: #2e2e3f;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #ff00ff;
-  max-width: 320px;
-  width: 100%;
-}
+  const rollBtn = document.getElementById("rollBtn");
+  const balanceDisplay = document.getElementById("balance");
+  const resultDisplay = document.getElementById("result");
+  const capsule = document.getElementById("capsule");
 
-.gacha-machine {
-  margin: 20px auto;
-  width: 100px;
-  height: 100px;
-  background: #444;
-  border-radius: 50%;
-  border: 4px solid #ff00ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
+  const historyList = document.getElementById("history-list");
+  const rollHistory = [];
 
-.capsule {
-  width: 70px;
-  height: 70px;
-  background: #ff00ff;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: none;
-}
+  let balance = 1000;
 
-.spin {
-  animation: spin 1s ease-in-out;
-}
+  function updateBalance() {
+    balanceDisplay.textContent = balance;
+  }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(720deg); }
-}
+  updateBalance();
 
-button {
-  background-color: #ff00ff;
-  color: #fff;
-  padding: 12px 24px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-top: 10px;
-}
+  const rewards = [
+    { amount: 0, color: "#666", label: "No Prize 💨" },
+    { amount: 50, color: "#4caf50", label: "Common 💎" },
+    { amount: 100, color: "#2196f3", label: "Rare 🧿" },
+    { amount: 250, color: "#ffc107", label: "Legendary 🟡" },
+    { amount: 1000, color: "#f44336", label: "SSR God Pull 🌈" }
+  ];
 
-button:hover {
-  background-color: #e600e6;
-}
+  const chances = [30, 25, 20, 15, 10];
 
-/* History panel styling */
-#history-container {
-  margin-top: 20px;
-  background: #3e3e5e;
-  padding: 15px;
-  border-radius: 12px;
-  max-height: 200px;
-  overflow-y: auto;
-  text-align: left;
-}
+  rollBtn.addEventListener("click", function() {
+    rollBtn.disabled = true;
+    resultDisplay.textContent = "";
+    capsule.textContent = "?";
+    capsule.style.backgroundColor = "#ff00ff";
+    capsule.classList.add("spin");
 
-#history-container h3 {
-  margin-top: 0;
-  color: #ff00ff;
-  font-weight: 600;
-}
+    if (balance < 100) {
+      resultDisplay.textContent = "Not enough coins to roll! You need 100 coins.";
+      rollBtn.disabled = false;
+      capsule.classList.remove("spin");
+      return;
+    }
 
-#history-list {
-  list-style: none;
-  padding-left: 0;
-  color: #ddd;
-  font-size: 14px;
-  margin: 0;
-}
+    balance -= 100;
+    updateBalance();
 
-#history-list li {
-  padding: 4px 0;
-  border-bottom: 1px solid #555;
-}
+    setTimeout(function() {
+      capsule.classList.remove("spin");
+
+      const roll = Math.random() * 100;
+      let cumulative = 0;
+      let rewardIndex = 0;
+
+      for (let i = 0; i < chances.length; i++) {
+        cumulative += chances[i];
+        if (roll < cumulative) {
+          rewardIndex = i;
+          break;
+        }
+      }
+
+      const reward = rewards[rewardIndex];
+      balance += reward.amount;
+      updateBalance();
+
+      capsule.style.backgroundColor = reward.color;
+      capsule.textContent = reward.amount > 0 ? reward.amount : "💨";
+
+      if (reward.amount > 0) {
+        resultDisplay.textContent = `You won ${reward.amount} coins! (${reward.label}) 🎉`;
+      } else {
+        resultDisplay.textContent = `No luck this time! (${reward.label}) 😢`;
+      }
+
+      // Update roll history
+      rollHistory.unshift(`${reward.label} (+${reward.amount} coins)`);
+      if (rollHistory.length > 10) rollHistory.pop();
+
+      historyList.innerHTML = "";
+      rollHistory.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = entry;
+        historyList.appendChild(li);
+      });
+
+      rollBtn.disabled = false;
+    }, 1200);
+  });
+
+});
+
+
+
+
