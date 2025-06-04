@@ -1,191 +1,113 @@
-// Wait until the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", function () {
+// Show selected game
+function showGame(game) {
+  document.getElementById("mainMenu").classList.add("hidden");
+  document.getElementById("gachaGame").classList.add("hidden");
+  document.getElementById("diceGame").classList.add("hidden");
+
+  if (game === "gacha") document.getElementById("gachaGame").classList.remove("hidden");
+  else if (game === "dice") document.getElementById("diceGame").classList.remove("hidden");
+}
+
+// Return to main menu
+function returnToMenu() {
+  document.getElementById("mainMenu").classList.remove("hidden");
+  document.getElementById("gachaGame").classList.add("hidden");
+  document.getElementById("diceGame").classList.add("hidden");
+}
+
+function rollDice() {
+  const result = Math.floor(Math.random() * 6) + 1;
+  document.getElementById("diceResult").textContent = `🎲 ${result}`;
+}
+
+// Gacha Game Logic
+document.addEventListener("DOMContentLoaded", () => {
   const rollBtn = document.getElementById("rollBtn");
   const multiRollBtn = document.getElementById("multiRollBtn");
-  const tripleRollBtn = document.getElementById("tripleRollBtn");
+  const slot1 = document.getElementById("slot1");
+  const slot2 = document.getElementById("slot2");
+  const slot3 = document.getElementById("slot3");
   const balanceDisplay = document.getElementById("balance");
   const resultDisplay = document.getElementById("result");
-  const capsule = document.getElementById("capsule");
-  const historyList = document.getElementById("history-list");
-  const levelDisplay = document.getElementById("level");
-  const achievementsList = document.getElementById("achievements");
-  const boostDisplay = document.getElementById("characterBoost");
-  const shopItemsList = document.getElementById("shop-items");
+  const levelDisplay = document.getElementById("levelDisplay");
+  const achievementDisplay = document.getElementById("achievementDisplay");
+  const characterBoostDisplay = document.getElementById("characterBoostDisplay");
+  const historyPanel = document.getElementById("historyPanel");
 
   let balance = 1000;
   let level = 1;
-  let totalEarnings = 0;
-  let character = null;
-  let boostMultiplier = 1;
+  let totalEarned = 0;
+  let characterUnlocked = false;
 
-  const characters = [
-    { name: "Naruto", boost: 1.1 },
-    { name: "Luffy", boost: 1.2 },
-    { name: "Goku", boost: 1.3 },
-    { name: "Saitama", boost: 1.5 },
-    { name: "Gojo", boost: 2.0 }
-  ];
+  const rewards = [0, 50, 100, 250, 500, 1000];
+  const chances = [30, 25, 20, 15, 7, 3];
 
-  const rewards = [
-    { amount: 0, color: "#666", label: "No Prize 💨" },
-    { amount: 50, color: "#4caf50", label: "Common 💎" },
-    { amount: 100, color: "#2196f3", label: "Rare 🧿" },
-    { amount: 250, color: "#ffc107", label: "Legendary 🟡" },
-    { amount: 1000, color: "#f44336", label: "SSR God Pull 🌈" }
-  ];
-
-  const chances = [30, 25, 20, 15, 10];
-
-  const shopItems = [
-    { name: "Coin Doubler", cost: 5000, effect: () => boostMultiplier *= 2 },
-    { name: "Lucky Charm", cost: 8000, effect: () => chances[4] += 10 },
-    { name: "Auto Clicker", cost: 10000, effect: () => balance += 1000 },
-  ];
-
-  function updateBalance() {
+  function updateDisplay() {
     balanceDisplay.textContent = balance;
-  }
-
-  function updateLevel() {
     levelDisplay.textContent = `Level: ${level}`;
+    achievementDisplay.textContent = getAchievement();
+    characterBoostDisplay.textContent = characterUnlocked ? "🎌 Anime Character Boost: +10% coins!" : "";
   }
 
-  function updateBoost() {
-    if (character) {
-      boostDisplay.textContent = `Character Boost: ${character.name} (${character.boost}x)`;
-    } else {
-      boostDisplay.textContent = "Character Boost: None";
-    }
+  function getAchievement() {
+    if (totalEarned >= 1_000_000) return "🏆 God Achievement Unlocked!";
+    if (totalEarned >= 100_000) return "🔥 Pro Achievement Unlocked!";
+    if (totalEarned >= 10_000) return "⭐ Basic Achievement Unlocked!";
+    if (totalEarned >= 1000) return "🎉 Rookie Achievement Unlocked!";
+    return "";
   }
 
-  function checkAchievements() {
-    achievementsList.innerHTML = "";
-    if (totalEarnings >= 1000) addAchievement("🏅 Rookie Achievement");
-    if (totalEarnings >= 10000) addAchievement("🎖️ Basic Achievement");
-    if (totalEarnings >= 100000) addAchievement("🥇 Pro Achievement");
-    if (totalEarnings >= 1000000) addAchievement("👑 God Achievement - Minigames Unlocked!");
-  }
-
-  function addAchievement(text) {
-    const li = document.createElement("li");
-    li.textContent = text;
-    achievementsList.appendChild(li);
-  }
-
-  function updateHistory(reward) {
-    const li = document.createElement("li");
-    li.textContent = `You won ${reward.amount} coins (${reward.label})`;
-    historyList.insertBefore(li, historyList.firstChild);
-  }
-
-  function spinGacha() {
-    const roll = Math.random() * 100;
-    let cumulative = 0;
-    let rewardIndex = 0;
-    for (let i = 0; i < chances.length; i++) {
-      cumulative += chances[i];
-      if (roll < cumulative) {
-        rewardIndex = i;
-        break;
-      }
-    }
-    return rewards[rewardIndex];
-  }
-
-  function performRoll(times = 1) {
-    let totalReward = 0;
-    for (let i = 0; i < times; i++) {
-      const reward = spinGacha();
-      let boostedAmount = Math.floor(reward.amount * boostMultiplier);
-      totalReward += boostedAmount;
-      updateHistory(reward);
-    }
-    balance += totalReward;
-    totalEarnings += totalReward;
-    updateBalance();
-    updateLevel();
-    checkAchievements();
-    resultDisplay.textContent = `You earned ${totalReward} coins from ${times} roll${times > 1 ? "s" : ""}!`;
-  }
-
-  function getNewCharacter() {
-    const random = Math.floor(Math.random() * characters.length);
-    character = characters[random];
-    boostMultiplier = character.boost;
-    updateBoost();
-  }
-
-  function populateShop() {
-    shopItemsList.innerHTML = "";
-    shopItems.forEach((item, index) => {
-      const li = document.createElement("li");
-      const btn = document.createElement("button");
-      btn.textContent = `Buy ${item.name} (${item.cost} coins)`;
-      btn.addEventListener("click", () => {
-        if (balance >= item.cost) {
-          balance -= item.cost;
-          item.effect();
-          updateBalance();
-          resultDisplay.textContent = `You bought ${item.name}!`;
-        } else {
-          resultDisplay.textContent = "Not enough coins!";
-        }
-      });
-      li.appendChild(btn);
-      shopItemsList.appendChild(li);
-    });
-  }
-
-  rollBtn.addEventListener("click", () => {
+  function rollOnce() {
     if (balance < 100) {
-      resultDisplay.textContent = "Not enough coins to roll!";
+      resultDisplay.textContent = "Not enough coins!";
       return;
     }
+
     balance -= 100;
-    capsule.classList.add("spin");
-    setTimeout(() => {
-      capsule.classList.remove("spin");
-      performRoll();
-    }, 1200);
-  });
+    const reward = getReward();
+    const boost = characterUnlocked ? Math.floor(reward * 0.1) : 0;
+    const total = reward + boost;
 
-  multiRollBtn.addEventListener("click", () => {
+    totalEarned += total;
+    balance += total;
+
+    // Randomize slot numbers
+    slot1.textContent = Math.floor(Math.random() * 9) + 1;
+    slot2.textContent = Math.floor(Math.random() * 9) + 1;
+    slot3.textContent = Math.floor(Math.random() * 9) + 1;
+
+    resultDisplay.textContent = reward > 0 ? `You won ${total} coins!` : "No luck this time!";
+    historyPanel.innerHTML += `<p>Rolled: Won ${total} coins</p>`;
+
+    // Level up logic
+    if (totalEarned > level * 5000) level++;
+
+    // Unlock anime character
+    if (totalEarned >= 10_000) characterUnlocked = true;
+
+    updateDisplay();
+  }
+
+  function multiRoll() {
     if (balance < 1000) {
-      resultDisplay.textContent = "Not enough coins for Multi-Roll!";
+      resultDisplay.textContent = "Not enough coins for multi-roll!";
       return;
     }
-    balance -= 1000;
-    capsule.classList.add("spin");
-    setTimeout(() => {
-      capsule.classList.remove("spin");
-      performRoll(10);
-      if (totalEarnings >= 10000 && !character) {
-        getNewCharacter();
-      }
-    }, 1200);
-  });
+    for (let i = 0; i < 10; i++) rollOnce();
+  }
 
-  tripleRollBtn.addEventListener("click", () => {
-    if (balance < 10000) {
-      resultDisplay.textContent = "Not enough coins for Triple Roll!";
-      return;
+  function getReward() {
+    let roll = Math.random() * 100;
+    let sum = 0;
+    for (let i = 0; i < chances.length; i++) {
+      sum += chances[i];
+      if (roll < sum) return rewards[i];
     }
-    balance -= 10000;
-    capsule.classList.add("spin");
-    setTimeout(() => {
-      capsule.classList.remove("spin");
-      performRoll(100);
-      if (totalEarnings >= 10000 && !character) {
-        getNewCharacter();
-      }
-    }, 1200);
-  });
+    return 0;
+  }
 
-  // Initial Setup
-  updateBalance();
-  updateLevel();
-  updateBoost();
-  checkAchievements();
-  populateShop();
+  rollBtn.addEventListener("click", rollOnce);
+  multiRollBtn.addEventListener("click", multiRoll);
+
+  updateDisplay();
 });
-
