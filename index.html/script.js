@@ -1,123 +1,142 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const gameArea = document.getElementById("gameArea");
+  const gachaBtn = document.getElementById("gachaBtn");
+  const diceBtn = document.getElementById("diceBtn");
+  const musicToggle = document.getElementById("musicToggle");
+  const bgMusic = document.getElementById("bgMusic");
 
-  // --- SWITCH GAME VIEWS ---
-
-  const btnShowGacha = document.getElementById("btnShowGacha");
-  const btnShowDice = document.getElementById("btnShowDice");
-  const gachaGame = document.getElementById("gachaGame");
-  const diceGame = document.getElementById("diceGame");
-
-  btnShowGacha.addEventListener("click", () => {
-    gachaGame.classList.remove("hidden");
-    diceGame.classList.add("hidden");
+  // Music toggle
+  musicToggle.addEventListener("click", () => {
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicToggle.textContent = "Pause Music";
+    } else {
+      bgMusic.pause();
+      musicToggle.textContent = "Play Music";
+    }
   });
 
-  btnShowDice.addEventListener("click", () => {
-    diceGame.classList.remove("hidden");
-    gachaGame.classList.add("hidden");
-  });
+  // Gacha Machine Game HTML
+  const gachaHTML = `
+    <p>Your Balance: <span id="balance">1000</span> coins</p>
+    <div class="gacha-machine">
+      <div class="capsule" id="capsule">?</div>
+    </div>
+    <button id="rollBtn">Roll (100 coins)</button>
+    <p id="result"></p>
+  `;
 
-  // --- GACHA MACHINE ---
+  // Dice Game HTML
+  const diceHTML = `
+    <div class="dice-container">
+      <button id="rollDiceBtn">Roll Dice</button>
+      <p class="dice-result" id="diceResult">Roll to start!</p>
+    </div>
+  `;
 
-  const rollBtn = document.getElementById("rollBtn");
-  const balanceDisplay = document.getElementById("balance");
-  const resultDisplay = document.getElementById("result");
-  const capsule = document.getElementById("capsule");
-
+  // Initialize Gacha game state
   let balance = 1000;
 
-  function updateBalance() {
-    balanceDisplay.textContent = balance;
-  }
-  updateBalance();
+  // Load Gacha Machine game
+  function loadGachaGame() {
+    gameArea.innerHTML = gachaHTML;
+    balance = 1000;
+    const rollBtn = document.getElementById("rollBtn");
+    const balanceDisplay = document.getElementById("balance");
+    const resultDisplay = document.getElementById("result");
+    const capsule = document.getElementById("capsule");
 
-  const rewards = [
-    { amount: 0, color: "#666", label: "No Prize 💨" },
-    { amount: 50, color: "#4caf50", label: "Common 💎" },
-    { amount: 100, color: "#2196f3", label: "Rare 🧿" },
-    { amount: 250, color: "#ffc107", label: "Legendary 🟡" },
-    { amount: 1000, color: "#f44336", label: "SSR God Pull 🌈" }
-  ];
-  const chances = [30, 25, 20, 15, 10]; // percentages
-
-  rollBtn.addEventListener("click", () => {
-    if (balance < 100) {
-      resultDisplay.textContent = "Not enough coins to roll! You need 100 coins.";
-      return;
+    function updateBalance() {
+      balanceDisplay.textContent = balance;
     }
 
-    rollBtn.disabled = true;
-    resultDisplay.textContent = "";
-    capsule.textContent = "?";
-    capsule.style.backgroundColor = "#ff00ff";
-    capsule.classList.add("spin");
-
-    balance -= 100;
     updateBalance();
 
-    setTimeout(() => {
-      capsule.classList.remove("spin");
+    const rewards = [
+      { amount: 0, color: "#666", label: "No Prize 💨" },
+      { amount: 50, color: "#4caf50", label: "Common 💎" },
+      { amount: 100, color: "#2196f3", label: "Rare 🧿" },
+      { amount: 250, color: "#ffc107", label: "Legendary 🟡" },
+      { amount: 1000, color: "#f44336", label: "SSR God Pull 🌈" }
+    ];
 
-      const roll = Math.random() * 100;
-      let cumulative = 0;
-      let rewardIndex = 0;
+    const chances = [30, 25, 20, 15, 10];
 
-      for (let i = 0; i < chances.length; i++) {
-        cumulative += chances[i];
-        if (roll < cumulative) {
-          rewardIndex = i;
-          break;
-        }
+    rollBtn.addEventListener("click", () => {
+      rollBtn.disabled = true;
+      resultDisplay.textContent = "";
+      capsule.textContent = "?";
+      capsule.style.backgroundColor = "#ff00ff";
+      capsule.classList.add("spin");
+
+      if (balance < 100) {
+        resultDisplay.textContent = "Not enough coins to roll! You need 100 coins.";
+        rollBtn.disabled = false;
+        capsule.classList.remove("spin");
+        return;
       }
 
-      const reward = rewards[rewardIndex];
-      balance += reward.amount;
+      balance -= 100;
       updateBalance();
 
-      capsule.style.backgroundColor = reward.color;
-      capsule.textContent = reward.amount > 0 ? reward.amount : "💨";
+      setTimeout(() => {
+        capsule.classList.remove("spin");
 
-      if (reward.amount > 0) {
-        resultDisplay.textContent = `You won ${reward.amount} coins! (${reward.label}) 🎉`;
-      } else {
-        resultDisplay.textContent = `No luck this time! (${reward.label}) 😢`;
-      }
+        const roll = Math.random() * 100;
+        let cumulative = 0;
+        let rewardIndex = 0;
 
-      rollBtn.disabled = false;
-    }, 1200);
-  });
+        for (let i = 0; i < chances.length; i++) {
+          cumulative += chances[i];
+          if (roll < cumulative) {
+            rewardIndex = i;
+            break;
+          }
+        }
 
-  // --- DICE GAME ---
+        const reward = rewards[rewardIndex];
 
-  const diceRollBtn = document.getElementById("diceRollBtn");
-  const diceResult = document.getElementById("diceResult");
-  const diceMessage = document.getElementById("diceMessage");
+        balance += reward.amount;
+        updateBalance();
 
-  diceRollBtn.addEventListener("click", () => {
-    diceRollBtn.disabled = true;
-    diceMessage.textContent = "";
-    diceResult.textContent = "🎲";
+        capsule.style.backgroundColor = reward.color;
+        capsule.textContent = reward.amount > 0 ? reward.amount : "💨";
 
-    setTimeout(() => {
-      // Roll a dice number 1-6
-      const roll = Math.floor(Math.random() * 6) + 1;
+        if (reward.amount > 0) {
+          resultDisplay.textContent = `You won ${reward.amount} coins! (${reward.label}) 🎉`;
+        } else {
+          resultDisplay.textContent = `No luck this time! (${reward.label}) 😢`;
+        }
 
-      // Show dice emoji for the number
-      const diceEmojis = ["🎲", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-      diceResult.textContent = diceEmojis[roll];
+        rollBtn.disabled = false;
+      }, 1200);
+    });
+  }
 
-      diceMessage.textContent = `You rolled a ${roll}!`;
+  // Load Dice Game
+  function loadDiceGame() {
+    gameArea.innerHTML = diceHTML;
 
-      diceRollBtn.disabled = false;
-    }, 800);
-  });
+    const rollDiceBtn = document.getElementById("rollDiceBtn");
+    const diceResult = document.getElementById("diceResult");
 
+    rollDiceBtn.addEventListener("click", () => {
+      rollDiceBtn.disabled = true;
+      diceResult.textContent = "Rolling...";
+      setTimeout(() => {
+        const roll = Math.floor(Math.random() * 6) + 1;
+        diceResult.textContent = `You rolled a ${roll}!`;
+        rollDiceBtn.disabled = false;
+      }, 1000);
+    });
+  }
+
+  // Default load Gacha game on page load
+  loadGachaGame();
+
+  // Buttons to switch games
+  gachaBtn.addEventListener("click", loadGachaGame);
+  diceBtn.addEventListener("click", loadDiceGame);
 });
-
-
-
-    
-   
-
 
 
