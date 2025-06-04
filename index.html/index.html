@@ -2,49 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JJ's Casino</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="home-screen" id="homeScreen">
-    <h1>Welcome to JJ's Casino 🎰</h1>
+  <div id="mainMenu">
+    <h1>🎰 Welcome to JJ's Casino 🎲</h1>
     <p>Choose your game:</p>
     <button onclick="showGame('gacha')">Play Gacha Machine</button>
-    <button onclick="showGame('dice')">Roll Dice</button>
-    <p style="margin-top: 20px; font-style: italic; color: #bbb;">Gacha Machine is my personal favourite.</p>
+    <button onclick="showGame('dice')">Roll Dice Game</button>
+    <p class="note">Gacha Machine is my personal favourite 😎</p>
   </div>
 
-  <!-- Gacha Game -->
-  <div class="game-screen" id="gachaGame" style="display:none;">
-    <h2>🎰 Gacha Machine</h2>
+  <div id="gachaGame" class="game hidden">
+    <h2>🎰 Gacha Machine 🎰</h2>
     <p>Your Balance: <span id="balance">1000</span> coins</p>
-    <div class="gacha-machine">
+    <div class="slots">
       <div class="slot" id="slot1">?</div>
       <div class="slot" id="slot2">?</div>
       <div class="slot" id="slot3">?</div>
     </div>
     <button id="rollBtn">Roll (100 coins)</button>
-    <button id="multiRollBtn">10x Roll</button>
+    <button id="multiRollBtn">Multi-Roll (1000 coins)</button>
     <p id="result"></p>
     <p id="levelDisplay"></p>
     <p id="achievementDisplay"></p>
     <p id="characterBoostDisplay"></p>
     <div id="historyPanel"></div>
-    <button onclick="backToHome()">🔙 Back to Menu</button>
+    <button onclick="returnToMenu()">🔙 Back to Menu</button>
   </div>
 
-  <!-- Dice Game -->
-  <div class="game-screen" id="diceGame" style="display:none;">
-    <h2>🎲 Dice Game</h2>
-    <p>Your Balance: <span id="diceBalance">1000</span> coins</p>
-    <button onclick="rollDice()">Roll Dice (50 coins)</button>
-    <p id="diceResult"></p>
-    <button onclick="backToHome()">🔙 Back to Menu</button>
+  <div id="diceGame" class="game hidden">
+    <h2>🎲 Dice Game 🎲</h2>
+    <p>Roll a 6-sided die!</p>
+    <button onclick="rollDice()">Roll Dice</button>
+    <p id="diceResult">🎲</p>
+    <button onclick="returnToMenu()">🔙 Back to Menu</button>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-    
