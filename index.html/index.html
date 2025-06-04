@@ -9,19 +9,28 @@
   <div class="machine-container">
     <h1>🎰 Gacha Machine 🎰</h1>
     <p>Your Balance: <span id="balance">1000</span> coins</p>
+    <p id="level">Level: 1</p>
+    <p id="characterBoost">Character Boost: None</p>
+
     <div class="gacha-machine">
       <div class="capsule" id="capsule">?</div>
     </div>
+
     <button id="rollBtn">Roll (100 coins)</button>
+    <button id="multiRollBtn">Multi-Roll (1000 coins)</button>
+
     <p id="result"></p>
 
-    <!-- History panel -->
-    <div id="history-container">
-      <h3>Roll History</h3>
-      <ul id="history-list"></ul>
-    </div>
+    <h3>Achievements</h3>
+    <ul id="achievements"></ul>
+
+    <h3>Roll History</h3>
+    <ul id="history-list"></ul>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+
+  
