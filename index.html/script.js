@@ -1,15 +1,15 @@
 // Game Variables
-let cash = 1000.0;
+let cash = 1000;
 let level = 1;
 let xp = 0;
 let xpToLevel = 100;
 let rollHistory = [];
 const animeCharacters = [
   { name: 'Sakura', buff: 0.1 },
-  { name: 'Naruto', buff: 1 },
-  { name: 'Sasuke', buff: 2 },
-  { name: 'LUffy', buff: 3  },
-  { name: 'Kakshi', buff: 4 },
+  { name: 'Kaito', buff: 0.1 },
+  { name: 'Miyu', buff: 0.1 },
+  { name: 'Ren', buff: 0.1 },
+  { name: 'Akira', buff: 0.1 },
 ];
 let unlockedCharacters = [];
 
@@ -67,24 +67,23 @@ function addXP(amount) {
   while (xp >= xpToLevel) {
     xp -= xpToLevel;
     level++;
-    displayMessage(`Level Up! You reached level ${level}!`);
+    displayMessage(`Level Up! You're now level ${level}!`);
   }
 }
 
 function getTotalBuffMultiplier() {
-  let characterBuff = unlockedCharacters.length * 0.1; // 10% per char
-  let levelBuff = level * 0.1; // 10% per level
-  return (1 + characterBuff) * (1 + levelBuff);
+  const charBuff = unlockedCharacters.length * 0.1;
+  const levelBuff = level * 0.1;
+  return (1 + charBuff) * (1 + levelBuff);
 }
 
 function unlockCharacterRandom() {
-  if (unlockedCharacters.length >= animeCharacters.length) return;
-  let locked = animeCharacters.filter(c => !unlockedCharacters.includes(c));
+  const locked = animeCharacters.filter(c => !unlockedCharacters.includes(c));
   if (locked.length === 0) return;
-  let choice = locked[getRandomInt(0, locked.length - 1)];
+  const choice = locked[getRandomInt(0, locked.length - 1)];
   unlockedCharacters.push(choice);
   updateCharactersList();
-  displayMessage(`You unlocked ${choice.name}! Buff +10% cash earnings.`);
+  displayMessage(`You unlocked ${choice.name}! Buff +10% cash earnings!`);
 }
 
 function updateCharactersList() {
@@ -100,6 +99,7 @@ function rollGacha() {
     displayMessage(`Not enough cash to roll! Need $${rollCost}`);
     return;
   }
+
   cash -= rollCost;
   const nums = [getRandomInt(1, 9), getRandomInt(1, 9), getRandomInt(1, 9)];
   updateSlots(nums);
@@ -118,7 +118,7 @@ function rollGacha() {
 
   updateDisplays();
   updateRollHistory();
-  displayMessage(`Rolled and spent $${rollCost}. Earned $${earned.toFixed(2)}!`);
+  displayMessage(`Rolled! Earned $${earned.toFixed(2)}`);
 }
 
 function multiRoll(count = 10) {
@@ -127,6 +127,7 @@ function multiRoll(count = 10) {
     displayMessage(`Not enough cash for ${count} rolls! Need $${totalCost}`);
     return;
   }
+
   cash -= totalCost;
 
   for (let i = 0; i < count; i++) {
@@ -148,7 +149,7 @@ function multiRoll(count = 10) {
   updateSlots(['-', '-', '-']);
   updateDisplays();
   updateRollHistory();
-  displayMessage(`Completed ${count} rolls, spent $${totalCost}!`);
+  displayMessage(`Completed ${count} rolls`);
 }
 
 function updateRollHistory() {
@@ -160,6 +161,7 @@ function playDice() {
     displayMessage(`Not enough cash to play dice! Need $${diceCost}`);
     return;
   }
+
   cash -= diceCost;
 
   const roll = getRandomInt(1, 6);
@@ -168,7 +170,7 @@ function playDice() {
   let earned = 0;
   switch (roll) {
     case 6: earned = 50; break;
-    case 5: earned = 20; break;
+    case 5: earned = 25; break;
     case 4: earned = 15; break;
     case 3: earned = 10; break;
     case 2: earned = 5; break;
@@ -179,38 +181,38 @@ function playDice() {
   cash += earned;
 
   updateDisplays();
-  displayMessage(`Spent $${diceCost} to play dice. You earned $${earned.toFixed(2)}!`);
+  displayMessage(`You rolled a ${roll}! Earned $${earned.toFixed(2)}!`);
 }
 
-// Store Button Handlers
+// Store Actions
 buyXPBoostBtn.addEventListener('click', () => {
   if (cash < 100) {
-    displayMessage('Not enough cash to buy XP Boost!');
+    displayMessage('Not enough cash for XP Boost!');
     return;
   }
   cash -= 100;
   addXP(50);
   updateDisplays();
-  displayMessage('Bought XP Boost (+50 XP)!');
+  displayMessage('XP Boost (+50 XP) purchased!');
 });
 
 buyCashBonusBtn.addEventListener('click', () => {
   if (cash < 150) {
-    displayMessage('Not enough cash to buy Cash Bonus!');
+    displayMessage('Not enough cash for Cash Bonus!');
     return;
   }
   cash -= 150;
-  cash += 100; // instant cash bonus
+  cash += 100;
   updateDisplays();
-  displayMessage('Bought Cash Bonus (+$100)!');
+  displayMessage('Cash Bonus (+$100) purchased!');
 });
 
-// Button Event Listeners
+// Button Bindings
 rollBtn.addEventListener('click', rollGacha);
 multiRollBtn.addEventListener('click', () => multiRoll(10));
 diceBtn.addEventListener('click', playDice);
 
-// Initial UI Setup
+// Init
 updateDisplays();
 updateRollHistory();
 updateCharactersList();
