@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Gacha Machine Game</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="machine-container">
-    <h1>🎰 Gacha Machine 🎰</h1>
+    <h1>✨ Gacha Machine Game ✨</h1>
     <p>Your Balance: <span id="balance">1000</span> coins</p>
     <p id="level">Level: 1</p>
     <p id="characterBoost">Character Boost: None</p>
@@ -16,21 +16,20 @@
       <div class="capsule" id="capsule">?</div>
     </div>
 
-    <button id="rollBtn">Roll (100 coins)</button>
-    <button id="multiRollBtn">Multi-Roll (1000 coins)</button>
+    <button id="rollBtn">Single Roll (100 coins)</button>
+    <button id="multiRollBtn">Multi Roll (1000 coins)</button>
+    <button id="tripleRollBtn">Triple Roll (300 coins)</button>
 
     <p id="result"></p>
-
-    <h3>Achievements</h3>
     <ul id="achievements"></ul>
 
-    <h3>Roll History</h3>
+    <h3>Roll History:</h3>
     <ul id="history-list"></ul>
+
+    <h3>Triple Roll Results:</h3>
+    <div id="tripleRollResults" class="triple-roll"></div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
-  
