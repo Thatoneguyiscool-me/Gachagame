@@ -2,29 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>JJ's Casino</title>
+  <title>JJ's Casino - Gacha & Dice Games</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🎲 Welcome to JJ's Casino 🎰</h1>
-    <div class="game-select">
-      <button id="gachaBtn">Play Gacha Machine</button>
-      <button id="diceBtn">Play Roll Dice</button>
+    <h1>Welcome to JJ's Casino 🎰</h1>
+    <p>Pick a game to play:</p>
+
+    <div class="button-group">
+      <button id="playGachaBtn">Play Gacha Machine</button>
+      <button id="playDiceBtn">Play Roll Dice</button>
     </div>
 
-    <div id="gameArea">
-      <!-- Game content will load here -->
-    </div>
-
-    <div class="music-controls">
-      <button id="musicToggle">Play Music</button>
-    </div>
-
-    <audio id="bgMusic" loop>
-      <source src="https://cdn.pixabay.com/download/audio/2022/03/28/audio_82e8337a11.mp3?filename=8-bit-retro-game-loop-11079.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
+    <div id="gameArea"></div>
   </div>
 
   <script src="script.js"></script>
