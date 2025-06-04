@@ -7,22 +7,24 @@
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to JJ's Casino 🎰🎲</h1>
-
+    <h1>🎲 Welcome to JJ's Casino 🎰</h1>
     <div class="game-select">
       <button id="gachaBtn">Play Gacha Machine</button>
-      <button id="diceBtn">Play Dice Game</button>
+      <button id="diceBtn">Play Roll Dice</button>
     </div>
 
-    <div id="gameArea"></div>
+    <div id="gameArea">
+      <!-- Game content will load here -->
+    </div>
 
     <div class="music-controls">
-      <audio id="bgMusic" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/23/audio_38e9e12063.mp3?filename=upbeat-casino-ambient-14229.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
       <button id="musicToggle">Play Music</button>
     </div>
+
+    <audio id="bgMusic" loop>
+      <source src="https://cdn.pixabay.com/download/audio/2022/03/28/audio_82e8337a11.mp3?filename=8-bit-retro-game-loop-11079.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
   </div>
 
   <script src="script.js"></script>
