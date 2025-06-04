@@ -1,123 +1,43 @@
 body {
-  margin: 0;
-  padding: 0;
+  background: linear-gradient(to bottom, #1e1e2f, #000);
+  color: #fff;
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(to bottom, #111, #222);
-  color: white;
-  text-align: center;
-}
-
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding-top: 40px;
 }
 
 h1 {
-  font-size: 3rem;
-  color: #ffcc00;
+  font-size: 36px;
+  color: gold;
   margin-bottom: 10px;
 }
 
-.menu-btn {
-  padding: 12px 24px;
-  background-color: #ff00cc;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  border-radius: 10px;
-  margin: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.menu-btn:hover {
-  background-color: #cc0099;
-}
-
-.game-area {
-  margin-top: 30px;
-  display: none;
-}
-
-#slots {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+.button-panel {
   margin: 20px 0;
 }
 
-.slot {
-  background-color: #333;
-  border: 3px solid #ff00cc;
-  border-radius: 12px;
-  font-size: 2rem;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#capsule {
-  margin-top: 20px;
-  width: 80px;
-  height: 80px;
-  background: #ff00cc;
-  border-radius: 50%;
-  font-size: 2rem;
-  line-height: 80px;
-  margin: 20px auto;
-  animation: none;
-}
-
-.spin {
-  animation: spin 1s ease-in-out;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(720deg); }
-}
-
 button {
-  background-color: #ff00cc;
+  background-color: #ff00ff;
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
   border: none;
-  border-radius: 10px;
+  padding: 12px 24px;
+  margin: 0 10px;
+  font-size: 16px;
+  border-radius: 8px;
   cursor: pointer;
-  margin: 10px;
-  transition: 0.3s;
+  transition: background 0.3s;
 }
 
 button:hover {
-  background-color: #cc0099;
+  background-color: #e600e6;
 }
 
-#historyPanel {
-  background: #222;
-  padding: 15px;
-  border-radius: 10px;
+#gameArea {
   margin-top: 20px;
-  text-align: left;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.achievement {
-  color: #00ffcc;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.music-player {
-  margin-top: 20px;
-}
-
-select, option {
-  padding: 5px;
-  font-size: 1rem;
-  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
 }
