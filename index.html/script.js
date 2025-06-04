@@ -2,7 +2,7 @@
 let cash = 1000;
 let level = 1;
 let xp = 0;
-let xpToLevel = 1000;
+let xpToLevel = 1000; // XP required increases by 1000 every level
 let rollHistory = [];
 
 const animeCharacters = [
@@ -51,11 +51,11 @@ function updateUI() {
 }
 
 function getRollCost() {
-  return 20 + (level - 1) * 10;
+  return 50 + (level - 1) * 25; // Increases more drastically per level
 }
 
 function getDiceCost() {
-  return 10 + (level - 1) * 5;
+  return 20 + (level - 1) * 10;
 }
 
 function addXP(amount) {
@@ -63,7 +63,7 @@ function addXP(amount) {
   while (xp >= xpToLevel) {
     xp -= xpToLevel;
     level++;
-    xpToLevel += 1000;
+    xpToLevel += 1000; // Each level needs 1000 more XP than the last
     showMessage(`🎉 You reached level ${level}!`);
   }
 }
