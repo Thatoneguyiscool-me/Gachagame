@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Gacha Machine Game</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JJ's Casino</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="machine-container">
-    <h1>✨ Gacha Machine Game ✨</h1>
+  <div class="home-screen" id="homeScreen">
+    <h1>Welcome to JJ's Casino 🎰</h1>
+    <p>Choose your game:</p>
+    <button onclick="showGame('gacha')">Play Gacha Machine</button>
+    <button onclick="showGame('dice')">Roll Dice</button>
+    <p style="margin-top: 20px; font-style: italic; color: #bbb;">Gacha Machine is my personal favourite.</p>
+  </div>
+
+  <!-- Gacha Game -->
+  <div class="game-screen" id="gachaGame" style="display:none;">
+    <h2>🎰 Gacha Machine</h2>
     <p>Your Balance: <span id="balance">1000</span> coins</p>
-    <p id="level">Level: 1</p>
-    <p id="characterBoost">Character Boost: None</p>
-
     <div class="gacha-machine">
-      <div class="capsule" id="capsule">?</div>
+      <div class="slot" id="slot1">?</div>
+      <div class="slot" id="slot2">?</div>
+      <div class="slot" id="slot3">?</div>
     </div>
-
-    <button id="rollBtn">Single Roll (100 coins)</button>
-    <button id="multiRollBtn">Multi Roll (1000 coins)</button>
-    <button id="tripleRollBtn">Triple Roll (300 coins)</button>
-
+    <button id="rollBtn">Roll (100 coins)</button>
+    <button id="multiRollBtn">10x Roll</button>
     <p id="result"></p>
-    <ul id="achievements"></ul>
+    <p id="levelDisplay"></p>
+    <p id="achievementDisplay"></p>
+    <p id="characterBoostDisplay"></p>
+    <div id="historyPanel"></div>
+    <button onclick="backToHome()">🔙 Back to Menu</button>
+  </div>
 
-    <h3>Roll History:</h3>
-    <ul id="history-list"></ul>
-
-    <h3>Triple Roll Results:</h3>
-    <div id="tripleRollResults" class="triple-roll"></div>
+  <!-- Dice Game -->
+  <div class="game-screen" id="diceGame" style="display:none;">
+    <h2>🎲 Dice Game</h2>
+    <p>Your Balance: <span id="diceBalance">1000</span> coins</p>
+    <button onclick="rollDice()">Roll Dice (50 coins)</button>
+    <p id="diceResult"></p>
+    <button onclick="backToHome()">🔙 Back to Menu</button>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+    
