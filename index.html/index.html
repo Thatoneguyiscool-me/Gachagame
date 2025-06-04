@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JJ's Casino</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="mainMenu">
+  <div id="menu" class="centered-container">
     <h1>🎰 Welcome to JJ's Casino 🎲</h1>
-    <p>Choose your game:</p>
-    <button onclick="showGame('gacha')">Play Gacha Machine</button>
-    <button onclick="showGame('dice')">Roll Dice Game</button>
-    <p class="note">Gacha Machine is my personal favourite 😎</p>
+    <p>Select a game to play:</p>
+    <button onclick="startGame('gacha')">Play Gacha Machine</button>
+    <button onclick="startGame('dice')">Play Roll Dice</button>
   </div>
 
-  <div id="gachaGame" class="game hidden">
+  <div id="gachaGame" class="game hidden centered-container">
     <h2>🎰 Gacha Machine 🎰</h2>
     <p>Your Balance: <span id="balance">1000</span> coins</p>
     <div class="slots">
@@ -29,14 +29,16 @@
     <p id="achievementDisplay"></p>
     <p id="characterBoostDisplay"></p>
     <div id="historyPanel"></div>
+    <button id="gachaFullscreenBtn">🖥️ Fullscreen</button>
     <button onclick="returnToMenu()">🔙 Back to Menu</button>
   </div>
 
-  <div id="diceGame" class="game hidden">
+  <div id="diceGame" class="game hidden centered-container">
     <h2>🎲 Dice Game 🎲</h2>
     <p>Roll a 6-sided die!</p>
-    <button onclick="rollDice()">Roll Dice</button>
-    <p id="diceResult">🎲</p>
+    <button id="diceRollBtn">Roll Dice</button>
+    <p id="diceResult" class="dice-display">🎲</p>
+    <button id="diceFullscreenBtn">🖥️ Fullscreen</button>
     <button onclick="returnToMenu()">🔙 Back to Menu</button>
   </div>
 
