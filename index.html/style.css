@@ -3,10 +3,11 @@ body {
   color: #fff;
   font-family: 'Arial', sans-serif;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
+  padding: 20px;
 }
 
 .machine-container {
@@ -15,7 +16,7 @@ body {
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 0 20px #ff00ff;
-  max-width: 320px;
+  max-width: 400px;
   width: 100%;
 }
 
@@ -64,39 +65,39 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
-  margin-top: 10px;
+  margin: 10px;
 }
 
 button:hover {
   background-color: #e600e6;
 }
 
-/* History panel styling */
-#history-container {
-  margin-top: 20px;
-  background: #3e3e5e;
-  padding: 15px;
-  border-radius: 12px;
-  max-height: 200px;
-  overflow-y: auto;
-  text-align: left;
+#result {
+  font-size: 16px;
+  margin-top: 10px;
+  color: #ffd700;
 }
 
-#history-container h3 {
-  margin-top: 0;
-  color: #ff00ff;
-  font-weight: 600;
-}
-
-#history-list {
-  list-style: none;
-  padding-left: 0;
-  color: #ddd;
+#levelDisplay, #achievementDisplay, #characterBoostDisplay {
+  margin-top: 10px;
   font-size: 14px;
-  margin: 0;
+  color: #00eaff;
 }
 
-#history-list li {
-  padding: 4px 0;
-  border-bottom: 1px solid #555;
+#historyPanel {
+  margin-top: 20px;
+  background-color: #1c1c2b;
+  padding: 15px;
+  border-radius: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  box-shadow: 0 0 10px #ff00ff;
+  font-size: 14px;
+  color: #ccc;
+}
+
+#historyPanel p {
+  margin: 5px 0;
+  border-bottom: 1px solid #444;
+  padding-bottom: 4px;
 }
