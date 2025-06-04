@@ -5,11 +5,11 @@ let xp = 0;
 let xpToLevel = 100;
 let rollHistory = [];
 const animeCharacters = [
-  { name: 'Sakura', buff: 0.1 },
-  { name: 'Kaito', buff: 0.1 },
-  { name: 'Miyu', buff: 0.1 },
-  { name: 'Ren', buff: 0.1 },
-  { name: 'Akira', buff: 0.1 },
+  { name: 'Sakura', buff: -0.1 },
+  { name: 'Miyamura', buff: 10 },
+  { name: 'sasuke', buff: 50 },
+  { name: 'Naruto', buff: 99 },
+  { name: 'Luffy', buff: 100 },
 ];
 let unlockedCharacters = [];
 
