@@ -2,21 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>JJ's Casino - Gacha & Dice Games</title>
+  <title>JJ's Casino</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to JJ's Casino 🎰</h1>
-    <p>Pick a game to play:</p>
 
-    <div class="button-group">
-      <button id="playGachaBtn">Play Gacha Machine</button>
-      <button id="playDiceBtn">Play Roll Dice</button>
-    </div>
-
-    <div id="gameArea"></div>
+  <h1>🎲 Welcome to JJ's Casino 🎰</h1>
+  <div class="button-panel">
+    <button id="playGachaBtn">Play Gacha Machine</button>
+    <button id="playDiceBtn">Roll Dice</button>
   </div>
+
+  <div id="gameArea"></div>
+
+  <!-- Background Music -->
+  <audio autoplay loop>
+    <source src="casino-music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
   <script src="script.js"></script>
 </body>
