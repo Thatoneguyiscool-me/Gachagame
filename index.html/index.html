@@ -2,25 +2,267 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>JJ's Casino</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JJ's Casino Gacha Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1a1a1a;
+      color: #eee;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 {
+      margin-bottom: 10px;
+      color: #f39c12;
+      text-shadow: 0 0 5px #f39c12;
+    }
+    button {
+      background: #f39c12;
+      border: none;
+      color: #222;
+      font-weight: bold;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+      box-shadow: 0 2px 5px rgba(243, 156, 18, 0.7);
+    }
+    button:hover {
+      background: #d17f0e;
+      box-shadow: 0 3px 8px rgba(209, 127, 14, 0.9);
+    }
+    #slots {
+      font-size: 3rem;
+      margin: 20px 0;
+      letter-spacing: 1.5rem;
+      user-select: none;
+      color: #f1c40f;
+      text-shadow: 0 0 10px #f1c40f;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    #levelDisplay, #achievementsDisplay {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+    #rollHistory {
+      margin-top: 20px;
+      width: 320px;
+      max-height: 180px;
+      overflow-y: auto;
+      background: #333;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: inset 0 0 8px #222;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+    }
+    #rollHistory div {
+      padding: 2px 0;
+      border-bottom: 1px solid #444;
+    }
+    #rollHistory div:last-child {
+      border-bottom: none;
+    }
+    /* Responsive */
+    @media (max-width: 400px) {
+      #slots {
+        font-size: 2rem;
+        letter-spacing: 1rem;
+      }
+      #rollHistory {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>🎲 Welcome to JJ's Casino 🎰</h1>
-  <p>Pick a game to play:</p>
-  <div class="button-panel">
-    <button id="playGachaBtn">Play Gacha Machine</button>
-    <button id="playDiceBtn">Play Roll Dice</button>
+
+  <h1>JJ's Casino Gacha Game</h1>
+
+  <div>
+    <button id="rollButton">Roll Gacha</button>
+    <button id="multiRollButton">Multi Roll (10x)</button>
+    <button id="storeButton">Open Store</button>
+    <button id="diceButton">Roll Dice</button>
   </div>
 
-  <div id="gameArea"></div>
+  <div id="slots" aria-label="Gacha Slots">
+    <span id="slot1">-</span> | 
+    <span id="slot2">-</span> | 
+    <span id="slot3">-</span>
+  </div>
 
-  <!-- Background Music -->
-  <audio id="bgm" autoplay loop>
-    <source src="casino-music.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <div id="levelDisplay">Level: 1 (XP: 0)</div>
+  <div id="achievementsDisplay">No achievements yet</div>
 
-  <script src="script.js"></script>
+  <div id="rollHistory" aria-label="Roll History">
+    Roll history will appear here.
+  </div>
+
+  <!-- Background music - replace src with your music file -->
+  <audio id="backgroundMusic" src="your-music-file.mp3" preload="auto"></audio>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // === ELEMENTS ===
+      const rollBtn = document.getElementById('rollButton');
+      const multiRollBtn = document.getElementById('multiRollButton');
+      const storeBtn = document.getElementById('storeButton');
+      const diceBtn = document.getElementById('diceButton');
+
+      const slot1 = document.getElementById('slot1');
+      const slot2 = document.getElementById('slot2');
+      const slot3 = document.getElementById('slot3');
+
+      const levelDisplay = document.getElementById('levelDisplay');
+      const achievementsDisplay = document.getElementById('achievementsDisplay');
+      const rollHistoryContainer = document.getElementById('rollHistory');
+
+      const music = document.getElementById('backgroundMusic');
+
+      // === GAME STATE ===
+      let playerLevel = 1;
+      let playerXP = 0;
+      let achievements = new Set();
+      let rollHistory = [];
+
+      // === CONSTANTS ===
+      const XP_PER_ROLL = 10;
+      const LEVEL_UP_XP = 100;
+
+      // === FUNCTIONS ===
+
+      // Utility: get random number between min and max (inclusive)
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      // Roll a single gacha (3 slot numbers)
+      function rollGacha() {
+        const nums = [getRandomInt(1, 9), getRandomInt(1, 9), getRandomInt(1, 9)];
+        updateSlots(nums);
+        addRollXP();
+        saveRollHistory(nums);
+        updateLevelAndAchievements();
+        playMusic();
+      }
+
+      // Multi-roll (e.g. 10 times)
+      function multiRoll(count = 10) {
+        for (let i = 0; i < count; i++) {
+          rollGacha();
+        }
+        alert(`You did ${count} rolls!`);
+      }
+
+      // Update slot displays
+      function updateSlots(nums) {
+        slot1.textContent = nums[0];
+        slot2.textContent = nums[1];
+        slot3.textContent = nums[2];
+      }
+
+      // Add XP for rolling
+      function addRollXP() {
+        playerXP += XP_PER_ROLL;
+        // Level up if XP hits threshold
+        while (playerXP >= LEVEL_UP_XP) {
+          playerXP -= LEVEL_UP_XP;
+          playerLevel++;
+          alert(`Level up! You reached level ${playerLevel}!`);
+        }
+      }
+
+      // Save roll history and update UI
+      function saveRollHistory(nums) {
+        const rollString = nums.join(' | ');
+        rollHistory.push(rollString);
+
+        // Limit history to last 10 rolls
+        if (rollHistory.length > 10) rollHistory.shift();
+
+        updateRollHistoryUI();
+      }
+
+      // Update roll history UI
+      function updateRollHistoryUI() {
+        if (!rollHistoryContainer) return;
+
+        rollHistoryContainer.innerHTML = ''; // clear
+
+        rollHistory.forEach((roll, index) => {
+          const div = document.createElement('div');
+          div.textContent = `Roll ${index + 1}: ${roll}`;
+          rollHistoryContainer.appendChild(div);
+        });
+      }
+
+      // Update level and achievements displays
+      function updateLevelAndAchievements() {
+        if (levelDisplay) {
+          levelDisplay.textContent = `Level: ${playerLevel} (XP: ${playerXP})`;
+        }
+
+        if (!achievementsDisplay) return;
+
+        // Simple achievement milestones
+        if (playerLevel >= 100 && !achievements.has('God')) {
+          achievements.add('God');
+          achievementsDisplay.textContent = 'Achievement: God (Level 100)';
+          alert('Achievement unlocked: God!');
+        } else if (playerLevel >= 50 && !achievements.has('Pro')) {
+          achievements.add('Pro');
+          achievementsDisplay.textContent = 'Achievement: Pro (Level 50)';
+          alert('Achievement unlocked: Pro!');
+        } else if (playerLevel >= 10 && !achievements.has('Basic')) {
+          achievements.add('Basic');
+          achievementsDisplay.textContent = 'Achievement: Basic (Level 10)';
+          alert('Achievement unlocked: Basic!');
+        } else if (!achievements.has('Rookie')) {
+          achievements.add('Rookie');
+          achievementsDisplay.textContent = 'Achievement: Rookie (Level 1)';
+        }
+      }
+
+      // Play background music or roll sound
+      function playMusic() {
+        if (music) {
+          music.currentTime = 0;
+          music.play().catch(() => {
+            // Autoplay might be blocked by browser
+            console.log('Music playback blocked.');
+          });
+        }
+      }
+
+      // Open store UI (placeholder)
+      function openStore() {
+        alert('Store opened! Implement your store UI here.');
+      }
+
+      // Dice roll mini-game logic
+      function rollDice() {
+        const diceRoll = getRandomInt(1, 6);
+        alert(`You rolled a ${diceRoll}! Implement dice game logic here.`);
+      }
+
+      // === ATTACH EVENT LISTENERS ===
+      if (rollBtn) rollBtn.addEventListener('click', rollGacha);
+      if (multiRollBtn) multiRollBtn.addEventListener('click', () => multiRoll(10));
+      if (storeBtn) storeBtn.addEventListener('click', openStore);
+      if (diceBtn) diceBtn.addEventListener('click', rollDice);
+
+      // Initialize display
+      updateLevelAndAchievements();
+      updateRollHistoryUI();
+      updateSlots(['-', '-', '-']);
+    });
+  </script>
 </body>
 </html>
