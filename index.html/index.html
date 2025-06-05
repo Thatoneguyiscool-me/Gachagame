@@ -1,41 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JJ's Gacha Casino</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JJ's Casino</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>JJ's Gacha Casino</h1>
+  <h1>🎰 JJ's Casino 🎰</h1>
 
-  <div id="game">
-    <p>Cash: $<span id="cash">0</span></p>
-    <p>Level: <span id="level">1</span></p>
-    <p>XP: <span id="xp">0/1000</span></p>
-    <p>Buffs: <span id="buffCount">0 (+0%)</span></p>
-    <p id="charactersList">Unlocked Characters: None</p>
+  <div id="money"></div>
+  <div id="level"></div>
+  <div id="xp"></div>
 
-    <div id="slots">- - -</div>
-    <button id="rollBtn">Roll ($20)</button>
-    <button id="multiRollBtn">10x Roll ($200)</button>
-
-    <h3>Dice Minigame</h3>
-    <button id="diceBtn">Play Dice ($10)</button>
-    <p id="diceResult"></p>
-
-    <h3>Store</h3>
-    <button id="buyXPBoostBtn">Buy XP Boost ($100)</button>
-    <button id="buyCashBonusBtn">Buy Cash Bonus ($150)</button>
-
-    <h3>Roll History</h3>
-    <div id="rollHistory"></div>
-    <p id="message"></p>
+  <div class="slot-machine">
+    <div class="slot">0</div>
+    <div class="slot">0</div>
+    <div class="slot">0</div>
   </div>
 
-  <!-- Background Music -->
-  <audio id="backgroundMusic" src="music.mp3" autoplay loop></audio>
-  <button onclick="document.getElementById('backgroundMusic').play()">🎵 Play Music</button>
+  <button onclick="spinSlots()">Roll Gacha</button>
+  <p id="result"></p>
+
+  <h2>🎲 Dice Game 🎲</h2>
+  <button onclick="rollDice()">Roll Dice</button>
+  <p id="dice-result"></p>
+
+  <h2>🧍‍♂️ Anime Character Store</h2>
+  <div id="character-store"></div>
 
   <script src="script.js"></script>
 </body>
