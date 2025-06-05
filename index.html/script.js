@@ -5,12 +5,13 @@ let xp = 0;
 let xpToLevel = 1000; // XP required increases by 1000 every level
 let rollHistory = [];
 
-const animeCharacters = [
+const characters = [
+  { name: "Sakura Haruno", anime: "Naruto", buff: 0.05, cost: 500, unlocked: false },
+  { name: "Naruto Uzumaki", anime: "Naruto", buff: 0.1, cost: 2000, unlocked: false },
+  { name: "Yoichi Isagi", anime: "Blue Lock", buff: 0.15, cost: 5000, unlocked: false },
+  { name: "Nika D. Sun God", anime: "One Piece", buff: 100, cost: 10000, unlocked: false }
+];
 
- { name: "Sakura Haruno", anime: "Naruto", buff: 0.05, cost: 500, unlocked: false },
- { name: "Naruto Uzumaki", anime: "Naruto", buff: 0.1, cost: 2000, unlocked: false },
- { name: "Yoichi Isagi", anime: "Blue Lock", buff: 0.15, cost: 5000, unlocked: false },
-{ name: "Nika D. Sun God", anime: "One Piece", buff: 100, cost: 10000, unlocked: false }
 
 
 ];
